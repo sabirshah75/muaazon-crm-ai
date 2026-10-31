@@ -20,6 +20,7 @@ IMPORTANT: only the released frontend + minimal HTML/CSS/a11y overlay is deploye
 - Root and health endpoints HTTP 200.
 - Playwright native Chrome welcome-screen smoke: desktop 1365x768 and mobile 390x844 both PASS, no JS page errors, no horizontal overflow.
 - Chrome clicked Continue with Email and revealed form; no browser JS errors.
+- Synthetic-only registration navigation reached the real Sign up form with Email and Password fields; no fake initial administrator was registered.
 - First axe-core WCAG A/AA audit found 2 serious violations on desktop and mobile: low-contrast legal links and unlabelled logo link.
 - Targeted React source changes + runtime compatibility overlay made; second axe audit found ZERO automatically detected violations on both screens, with ONE incomplete/manual-check item per screen.
 - Node integration approval/draft tests: 5 passed, 0 failed.
