@@ -16,6 +16,7 @@ type UndecoratedLinkProps = {
   replace?: boolean;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   fullWidth?: boolean;
+  ariaLabel?: string;
 };
 
 export const UndecoratedLink = ({
@@ -24,6 +25,7 @@ export const UndecoratedLink = ({
   replace = false,
   onClick,
   fullWidth = false,
+  ariaLabel,
 }: UndecoratedLinkProps) => {
   return (
     <Link
@@ -31,6 +33,7 @@ export const UndecoratedLink = ({
       replace={replace}
       onClick={onClick}
       className={styles.undecoratedLink}
+      aria-label={ariaLabel}
       style={fullWidth ? { width: '100%' } : undefined}
     >
       {children}

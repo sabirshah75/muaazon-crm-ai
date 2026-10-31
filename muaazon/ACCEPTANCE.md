@@ -1,50 +1,55 @@
-# Muaazon CRM AI — Consolidated Acceptance (2026-10-31)
-Baseline: Twenty v2.52.0 pinned to commit 62c9c99746abbe3392de76ba77fd32cc93883335.
-GitHub fork: https://github.com/sabirshah75/muaazon-crm-ai
-Source branch: muaazon/baseline-v1.0
-Local runtime: /home/muaazon/projects/muaazon-crm-runtime (outside this repository).
-No production deployment or customer data access authorized.
+# Muaazon CRM AI — Consolidated Engineering Acceptance, 31 October 2026
 
-## Verified PASS
-- Source checkout preserved, upstream retained and origin configured.
-- WSL2/Ubuntu/Docker Engine/Compose functional.
-- PostgreSQL and Redis Docker health checks succeeded.
-- Twenty server migrated blank test DB, reached healthy status, and served Windows localhost /healthz with HTTP 200.
-- Worker initially OOM at 700 MB; increased to 1200 MB and subsequently observed running for 18+ minutes.
-- Host port mapped only to 127.0.0.1:3000. DB/Redis have no published host ports.
-- Source branding metadata updated (title, social title, manifest), not yet deployed/built.
-- Provider-neutral approval-state module written; 5/5 Node tests PASS. All external dispatch remains disabled.
+## Source and deployment
+Fork: https://github.com/sabirshah75/muaazon-crm-ai
+Upstream: https://github.com/twentyhq/twenty
+Baseline release: twenty/v2.52.0 (62c9c99746abbe3392de76ba77fd32cc93883335)
+Source checkout: /home/muaazon/projects/muaazon-crm-ai
+Isolated runtime: /home/muaazon/projects/muaazon-crm-runtime
+Local URL: http://localhost:3000/welcome (not publicly reachable)
+IMPORTANT: only the released frontend + minimal HTML/CSS/a11y overlay is deployed. The React source edits have NOT been compiled into a new frontend build.
 
-## NOT ACCEPTED / OPEN
-- Twenty frontend bundle rebuilt with branding: NOT DONE (monorepo node_modules absent).
-- Full Twenty CRM user registration/login and CRUD UX, roles, tenant isolation: NOT TESTED.
-- Brand icon/illustrations, responsive design and independent visual QA: NOT DONE.
-- Actual AI inference, LeadFlow, Business Agency, Klaviyo, voice, CRM sync adapters: NOT CONNECTED.
-- Workflow persistence, schedules, outbound mail/sms, real approval UI: NOT IMPLEMENTED.
-- Vendor/API credentials and authorization, data-processing agreements: NOT PROVIDED/VERIFIED.
-- Security scanner, dependency vulnerability review, WCAG AA, browser UAT: NOT RUN.
-- Backup AND separate-database restore, disaster recovery and rollback: NOT CERTIFIED.
-- Long-duration stress, multi-user, failover, resource/power restart: NOT CERTIFIED.
-- Compliance: AGPL, MIT and Enterprise file boundaries require review before distributing.
-- Windows 10 is outside standard support. Do not expose as production service.
-- WSL D: mount warning unresolved.
-- C: free disk space around 22 GiB after image pulls. 8 GB system RAM is tight for builds.
+## PASS: verified execution
+- GitHub fork and local origin/upstream branch tracking verified previously.
+- Ubuntu 24.04 LTS WSL2, Docker Engine/Compose available.
+- PostgreSQL 16 + Redis local Docker healthchecks successful.
+- Twenty v2.52.0 server successfully migrated test database, became healthy and served HTTP 200 from Windows.
+- Worker previously ran 28+ minutes; after temporary QA stop it was restarted and was running with no OOM at immediate check.
+- Only 127.0.0.1:3000 published; DB/Redis not published on host.
+- Compiled frontend served Muaazon CRM AI title and matching PWA manifest in Windows.
+- Root and health endpoints HTTP 200.
+- Playwright native Chrome welcome-screen smoke: desktop 1365x768 and mobile 390x844 both PASS, no JS page errors, no horizontal overflow.
+- Chrome clicked Continue with Email and revealed form; no browser JS errors.
+- First axe-core WCAG A/AA audit found 2 serious violations on desktop and mobile: low-contrast legal links and unlabelled logo link.
+- Targeted React source changes + runtime compatibility overlay made; second axe audit found ZERO automatically detected violations on both screens, with ONE incomplete/manual-check item per screen.
+- Node integration approval/draft tests: 5 passed, 0 failed.
+- Node provider-neutral AI draft adapter tests: 7 passed, 0 failed (mock transport, no live inference).
+- Python branding overlay unit tests: 2 passed, 0 failed.
+- HTTP loopback security smoke PASS: CSP, X-Content-Type-Options nosniff, X-Frame-Options SAMEORIGIN, no secrets in served HTML, anonymous query returned no current-user data.
+- Secrets file outside Git has Unix mode 0600.
+- Empty test database backed up in PostgreSQL custom format, restored into an isolated temporary database: 76/76 tables matched; no users/workspaces. Scratch DB removed.
 
-## Gating conditions before internal approval
-1. Clean package installation and build in an environment with adequate RAM/disk.
-2. Full rebranded UI launched and visually accepted.
-3. Test users, auth, pipelines, CRUD and authorization checks.
-4. Independent review of security/tenant boundaries, secrets and vulnerabilities.
-5. Verified provider-specific integration contracts, least privilege, consent and audit logs.
-6. Durable approval/outbox execution, retry, idempotency and monitoring.
-7. Cross-browser, responsive, accessibility, backup/restore, recovery and documented UAT.
-8. Written internal sign-off. No live publishing without authorization.
+## NOT ACCEPTED / REMAINING PRODUCT WORK
+1. Full premium Muaazon UI branding: logo/icon/navigation/16-screen-level customization not done. Frontend must be rebuilt to deploy React source changes.
+2. Real first user registration, actual authentication, contacts/companies/deals pipeline CRUD, role permissions, multi-workspace isolation and admin UAT: not done. Current QA database has no users/workspaces.
+3. Model-driven AI: adapter has mock-based unit tests; no authorized live model provider configured or tested. Local LiteLLM ports 4020 and 4021 were closed at verification.
+4. LeadFlow AI, Agency, Klaviyo, calendars/voice/marketing integrations: no active provider sync or certified integration contracts. The outbox/approval boundary remains disconnected from Twenty's application platform; external sending is intentionally disabled.
+5. Durable jobs, end-to-end idempotency, persistence, retries, alerting, production workflows: not implemented.
+6. Security: automated smoke only; full vulnerability/dependency scanning, tenant isolation attack testing and qualified independent security review remain.
+7. Accessibility: automated axe passes on only the welcome screen; manual keyboard, screen-reader, full app navigation and independent WCAG 2.2 AA signoff remain.
+8. Multi-browser functional regression, load tests, true disaster-recovery RPO/RTO, encrypted off-device backup policy, independent customer UAT, release decision and publishing remain.
+9. WSL D: automount warning remains; Windows 10 and 8 GB RAM/limited C: disk are insufficient for confident local production hosting.
+10. License: preserve Twenty AGPL/MIT and Enterprise-licensed file restrictions; legal clearance before distribution.
 
-## Safe local operations
-View CRM: http://localhost:3000 (local Windows only).
-Run independent integration boundary checks:
-  cd /home/muaazon/projects/muaazon-crm-ai && node --test muaazon/tests/*.test.mjs
-Stop without deleting volumes:
-  sudo docker compose -f /home/muaazon/projects/muaazon-crm-runtime/compose.yaml stop
-Do not run docker compose down -v (removes test database).
-Never commit the runtime .env, credentials or real client records.
+## Release decision
+LOCAL FOUNDATION / RECOVERY / WELCOME SCREEN SMOKE: PASS.
+FULL COMMERCIAL APPLICATION / LIVE INTEGRATIONS / SECURITY / PUBLIC RELEASE: FAIL (not implemented or unverified).
+Do not process real customers, publicize this service, or claim external provider integration is live.
+
+## Evidence / reproduction
+Source tools: muaazon/tools/
+Node tests: node --test muaazon/tests/*.test.mjs
+Python tests: python3 -m unittest discover -s muaazon/tests -p test_brand_runtime.py -v
+Chrome evidence on Windows: %LOCALAPPDATA%\MuaazonCRM\qa-evidence\
+Runtime-only overlay: /home/muaazon/projects/muaazon-crm-runtime/frontend/overlay
+Source runbook: muaazon/RUNBOOK.md

@@ -79,7 +79,11 @@ export const Logo = ({
   return (
     <StyledContainer onClick={() => onClick?.()}>
       {isUsingDefaultLogo ? (
-        <UndecoratedLink to={to} onClick={() => redirectToDefaultDomain()}>
+        <UndecoratedLink
+          to={to}
+          onClick={() => redirectToDefaultDomain()}
+          ariaLabel="Return to CRM welcome"
+        >
           <StyledPrimaryLogo
             style={{ backgroundImage: `url(${primaryLogoUrl})` }}
           />

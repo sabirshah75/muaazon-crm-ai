@@ -16,7 +16,7 @@ const StyledCopyContainer = styled.div`
   text-align: center;
 
   & > a {
-    color: ${themeCssVariables.font.color.tertiary};
+    color: ${themeCssVariables.font.color.primary};
     text-decoration: none;
 
     &:hover {
@@ -41,7 +41,7 @@ const StyledLinksContainer = styled.div`
   & > button {
     background: none;
     border: none;
-    color: ${themeCssVariables.font.color.tertiary};
+    color: ${themeCssVariables.font.color.primary};
     cursor: pointer;
     font: inherit;
     padding: 0;
