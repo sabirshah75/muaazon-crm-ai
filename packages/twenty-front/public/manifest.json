@@ -1,9 +1,9 @@
 {
-  "short_name": "Twenty",
-  "name": "Twenty",
+  "short_name": "Muaazon CRM",
+  "name": "Muaazon CRM AI",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#152848",
   "background_color": "#ffffff",
   "icons": [
     {
